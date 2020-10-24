@@ -1,0 +1,7 @@
+build
+papers
+arxiv
+jcs
+.*.swp
+*.pyc
+plot_script/.ipynb_checkpoints/plot_python_script-checkpoint.ipynb
