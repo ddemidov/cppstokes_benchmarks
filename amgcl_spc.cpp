@@ -5,21 +5,21 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
+#include <amgcl/adapter/crs_tuple.hpp>
 #include <amgcl/backend/builtin.hpp>
 #include <amgcl/value_type/static_matrix.hpp>
 #include <amgcl/adapter/block_matrix.hpp>
 #include <amgcl/make_block_solver.hpp>
-
 #include <amgcl/make_solver.hpp>
 #include <amgcl/amg.hpp>
-#include <amgcl/solver/runtime.hpp>
-#include <amgcl/coarsening/runtime.hpp>
-#include <amgcl/relaxation/runtime.hpp>
+#include <amgcl/solver/fgmres.hpp>
+#include <amgcl/solver/cg.hpp>
+#include <amgcl/coarsening/aggregation.hpp>
+#include <amgcl/relaxation/ilut.hpp>
+#include <amgcl/relaxation/spai0.hpp>
+#include <amgcl/relaxation/as_preconditioner.hpp>
 #include <amgcl/preconditioner/schur_pressure_correction.hpp>
-#include <amgcl/preconditioner/runtime.hpp>
-#include <amgcl/adapter/crs_tuple.hpp>
 
-#include <amgcl/io/mm.hpp>
 #include <amgcl/io/binary.hpp>
 #include <amgcl/profiler.hpp>
 
@@ -43,15 +43,23 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
     typedef amgcl::backend::builtin<amgcl::static_matrix<prec_scalar, 3, 3>> UBackend;
     typedef
         amgcl::make_block_solver<
-            amgcl::runtime::preconditioner<UBackend>,
-            amgcl::runtime::solver::wrapper<UBackend>
+            amgcl::amg<
+                UBackend,
+                amgcl::coarsening::aggregation,
+                amgcl::relaxation::ilut
+                >,
+            amgcl::solver::cg<UBackend>
             > USolver;
 #else
     typedef amgcl::backend::builtin<prec_scalar> UBackend;
     typedef
         amgcl::make_solver<
-            amgcl::runtime::preconditioner<UBackend>,
-            amgcl::runtime::solver::wrapper<UBackend>
+            amgcl::amg<
+                UBackend,
+                amgcl::coarsening::aggregation,
+                amgcl::relaxation::ilut
+                >,
+            amgcl::solver::cg<UBackend>
             > USolver;
 #endif
 
@@ -63,11 +71,14 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
         amgcl::preconditioner::schur_pressure_correction<
             USolver,
             amgcl::make_solver<
-                amgcl::runtime::preconditioner<PBackend>,
-                amgcl::runtime::solver::wrapper<PBackend>
+                amgcl::relaxation::as_preconditioner<
+                    PBackend,
+                    amgcl::relaxation::spai0
+                    >,
+                amgcl::solver::cg<PBackend>
                 >
             >,
-        amgcl::runtime::solver::wrapper<SBackend>
+        amgcl::solver::fgmres<SBackend>
         > solve(K, prm);
     prof.toc("setup");
 
