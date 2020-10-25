@@ -4,9 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
+#include <numeric>
 #include <cassert>
 
-#include <amgcl/io/mm.hpp>
+#include <amgcl/io/binary.hpp>
 
 #include <petscksp.h>
 
@@ -23,9 +24,9 @@ void read_problem(std::string A_file, std::string f_file, std::string p_file,
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
     // Read partition
-    int n,m;
+    size_t n,m;
     std::vector<int> part;
-    std::tie(n, m) = io::mm_reader(p_file)(part);
+    io::read_dense(p_file, n, m, part);
     assert(m == 1 && "Wrong dimensions in partitioning vector");
 
     if (mpi_rank == 0) {
