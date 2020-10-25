@@ -28,6 +28,18 @@ add_executable(amgcl_spc_block_mixed amgcl_spc.cpp)
 target_link_libraries(amgcl_spc_block_mixed amgcl::amgcl Boost::program_options)
 target_compile_definitions(amgcl_spc_block_mixed PRIVATE PRECOND_SCALAR=float BLOCK_U)
 
+add_executable(amgcl_spc_pore amgcl_spc_pore.cpp)
+target_link_libraries(amgcl_spc_pore amgcl::amgcl Boost::program_options)
+target_compile_definitions(amgcl_spc_pore PRIVATE PRECOND_SCALAR=double)
+
+add_executable(amgcl_spc_pore_block amgcl_spc_pore.cpp)
+target_link_libraries(amgcl_spc_pore_block amgcl::amgcl Boost::program_options)
+target_compile_definitions(amgcl_spc_pore_block PRIVATE BLOCK_U)
+
+add_executable(amgcl_spc_pore_block_mixed amgcl_spc_pore.cpp)
+target_link_libraries(amgcl_spc_pore_block_mixed amgcl::amgcl Boost::program_options)
+target_compile_definitions(amgcl_spc_pore_block_mixed PRIVATE PRECOND_SCALAR=float BLOCK_U)
+
 add_executable(amgcl_v1 amgcl_v1.cpp)
 target_link_libraries(amgcl_v1 amgcl::amgcl Boost::program_options)
 
