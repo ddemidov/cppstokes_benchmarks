@@ -84,7 +84,7 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
         > solve(K, prm);
     prof.toc("setup");
 
-    //std::cout << solve << std::endl;
+    std::cout << solve << std::endl;
 
     auto n = amgcl::backend::rows(K);
 
