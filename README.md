@@ -23,17 +23,18 @@ can be done with the provided `partition.cpp`. The following example partitions
 the matrix for 4 MPI processes:
 
 ```sh
-$ ./partition -B -i A.bin -n 4 -o part4.bin
+./partition -B -i A.bin -n 4 -o part4.bin
 ```
 
 An example of running a PETSc benchmark:
 ```sh
-$ export OMP_NUM_THREADS=1
-$ mpirun -np 4 ./petsc_v1 -A A.bin -f b.bin -p part4.bin
-$ mpirun -np 4 ./petsc_fs -A A.bin -f b.bin -p part4.bin -u $(cat u.txt)
+export OMP_NUM_THREADS=1
+mpirun -np 4 ./petsc_v1 -A A.bin -f b.bin -p part4.bin
+mpirun -np 4 ./petsc_fs -A A.bin -f b.bin -p part4.bin -u $(cat u.txt)
 ```
 
 An example of running an AMGCL benchmark:
 ```sh
+./amgcl_v1 -A A.bin -f b.bin
 ./amgcl_spc_block_mixed -A A.bin -f b.bin -u $(cat u.txt)
 ```
