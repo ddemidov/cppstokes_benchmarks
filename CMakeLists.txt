@@ -5,6 +5,8 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 project(cppstokes)
 
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 #--- Boost ------------------------------------------------------------------
 option(Boost_USE_STATIC_LIBS "Use static versions of Boost libraries" OFF)
 if (WIN32)
@@ -12,9 +14,18 @@ if (WIN32)
 endif ()
 find_package(Boost REQUIRED COMPONENTS program_options)
 
+# --- METIS ----------------------------------------------------------------
+find_package(Metis)
+
 # --- AMGCL ----------------------------------------------------------------
 find_package(amgcl)
 get_property(AMGCL_INCLUDE_DIRS TARGET amgcl::amgcl PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+
+add_executable(bin2mm bin2mm.cpp)
+target_link_libraries(bin2mm amgcl::amgcl Boost::program_options)
+
+add_executable(partition partition.cpp)
+target_link_libraries(partition amgcl::amgcl Boost::program_options Metis::metis)
 
 add_executable(amgcl_spc amgcl_spc.cpp)
 target_link_libraries(amgcl_spc amgcl::amgcl Boost::program_options)
