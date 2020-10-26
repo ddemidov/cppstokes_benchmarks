@@ -4,16 +4,13 @@ Source code accompanying the manuscript
 by Denis Demidov, Lin Mu, Bin Wang
 
 The system matrices and the RHS vectors used for the benchmarks may be retrieved here:
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4134357.svg)](https://doi.org/10.5281/zenodo.4134357).
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4134357.svg)](https://doi.org/10.5281/zenodo.4134357)
 
 The files in the dataset correspond to the Stokes equation discretized for 3 different cases:
 
-- Unit cube problem (`ucube`). A rotating flow driven by an external force f in
-  a closed unit cube.
-- Converging-diverging tube problem (`cdtube`). Pressure-driven tube flow
-  through a 3D converging-diverging tube under a pressure drop of 1Pa.
-- Sphere packing problem (`spack`). A complex sphere packing flow problem
-  with non-uniform cell size distribution and large cell size contrast.
+* Unit cube problem (`ucube`). A rotating flow driven by an external force f in a closed unit cube.
+* Converging-diverging tube problem (`cdtube`). Pressure-driven tube flow through a 3D converging-diverging tube under a pressure drop of 1Pa.
+* Sphere packing problem (`spack`). A complex sphere packing flow problem with non-uniform cell size distribution and large cell size contrast.
 
 Each problem contains the system matrix (`A.bin`), the RHS vector (`b.bin`),
 and the text file containing the number of DOFs corresponding to the velocity
