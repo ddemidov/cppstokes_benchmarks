@@ -29,7 +29,7 @@ using amgcl::precondition;
 
 //---------------------------------------------------------------------------
 template <class Matrix>
-void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::property_tree::ptree &prm)
+void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::property_tree::ptree &prm, bool quiet)
 {
     auto t1 = prof.scoped_tic("schur_complement");
 
@@ -82,7 +82,7 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
         > solve(K, prm);
     prof.toc("setup");
 
-    std::cout << solve << std::endl;
+    if (!quiet) std::cout << solve << std::endl;
 
     auto n = amgcl::backend::rows(K);
 
@@ -116,6 +116,7 @@ int main(int argc, char *argv[]) {
         ("rhs,f", po::value<string>()->required(),    "The right-hand side")
         ("udofs,u", po::value<int>()->required(), "Number of U DOFs")
         ("params,P", po::value<string>(), "Parameter file in JSON format")
+        ("quiet,q", po::bool_switch()->default_value(false), "Suppress solver structure report")
         ;
 
     po::variables_map vm;
@@ -161,7 +162,7 @@ int main(int argc, char *argv[]) {
     prm.put("precond.psolver.solver.tol", 1e-1);
 
 
-    solve_schur(A, rhs, prm);
+    solve_schur(A, rhs, prm, vm["quiet"].as<bool>());
 
     std::cout << prof << std::endl;
 }
