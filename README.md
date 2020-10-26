@@ -1,10 +1,12 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4134357.svg)](https://doi.org/10.5281/zenodo.4134357)
+
 Source code accompanying the manuscript
 
 "Accelerating linear solvers for Stokes problems with C++ metaprogramming"
 by Denis Demidov, Lin Mu, Bin Wang
 
-The system matrices and the RHS vectors used for the benchmarks may be retrieved here:
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4134357.svg)](https://doi.org/10.5281/zenodo.4134357)
+The system matrices and the RHS vectors used for the benchmarks may be
+retrieved at [doi:10.5281/zenodo.4134357](https://doi.org/10.5281/zenodo.4134357).
 
 The files in the dataset correspond to the Stokes equation discretized for 3 different cases:
 
