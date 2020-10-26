@@ -82,7 +82,7 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
         > solve(K, prm);
     prof.toc("setup");
 
-    std::cout << solve << std::endl;
+    //std::cout << solve << std::endl;
 
     auto n = amgcl::backend::rows(K);
 
@@ -114,7 +114,8 @@ int main(int argc, char *argv[]) {
         ("help,h", "show help")
         ("matrix,A", po::value<string>()->required(), "The system matrix")
         ("rhs,f", po::value<string>()->required(),    "The right-hand side")
-        ("params,P", po::value<string>()->required(), "parameter file in json format")
+        ("udofs,u", po::value<int>()->required(), "Number of U DOFs")
+        ("params,P", po::value<string>(), "Parameter file in JSON format")
         ;
 
     po::variables_map vm;
@@ -128,7 +129,8 @@ int main(int argc, char *argv[]) {
     po::notify(vm);
 
     boost::property_tree::ptree prm;
-    read_json(vm["params"].as<string>(), prm);
+    if (vm.count("params"))
+        read_json(vm["params"].as<string>(), prm);
 
     size_t rows;
     vector<ptrdiff_t> ptr, col;
@@ -147,7 +149,19 @@ int main(int argc, char *argv[]) {
         precondition(n == rows && m == 1, "The RHS vector has wrong size");
     }
 
-    solve_schur(std::tie(rows, ptr, col, val), rhs, prm);
+    auto A = std::tie(rows, ptr, col, val);
+
+    prm.put("solver.maxiter", 1000);
+    prm.put("solver.tol", 1e-12);
+    prm.put("precond.pmask_size", amgcl::backend::rows(A));
+    prm.put("precond.pmask_pattern", ">" + std::to_string(vm["udofs"].as<int>()));
+    prm.put("precond.usolver.solver.maxiter", 2);
+    prm.put("precond.usolver.solver.tol", 1e-1);
+    prm.put("precond.psolver.solver.maxiter", 8);
+    prm.put("precond.psolver.solver.tol", 1e-1);
+
+
+    solve_schur(A, rhs, prm);
 
     std::cout << prof << std::endl;
 }
