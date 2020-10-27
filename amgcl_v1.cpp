@@ -34,7 +34,7 @@ void solve(const Matrix &K, const std::vector<double> &rhs)
 
     Solver::params prm;
     prm.solver.L = 5;
-    prm.solver.maxiter=1000;
+    prm.solver.maxiter=2000;
     prm.solver.tol = 1e-12;
 
     Solver solve(K, prm);
