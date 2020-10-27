@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
     KSPSetType(solver, KSPBCGSL);
     KSPBCGSLSetEll(solver, 5);
     KSPSetOperators(solver,A,A);
-    KSPSetTolerances(solver, 1e-12, PETSC_DEFAULT, PETSC_DEFAULT, 1000);
+    KSPSetTolerances(solver, 1e-12, PETSC_DEFAULT, PETSC_DEFAULT, 3000);
 
     KSPGetPC(solver,&prec);
     PCSetType(prec, PCBJACOBI);
