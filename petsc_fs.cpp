@@ -74,8 +74,8 @@ int main(int argc, char *argv[]) {
     KSPConvergedReasonView(solver, PETSC_VIEWER_STDOUT_WORLD);
     KSPGetIterationNumber(solver,&iters);
     KSPGetResidualNorm(solver,&error);
-    PetscPrintf(PETSC_COMM_WORLD,"\niters: %d\nerror: %lf", iters, error);
-    PetscPrintf(PETSC_COMM_WORLD,"\nsetup: %lf\nsolve: %lf\n", tm_setup, tm_solve);
+    PetscPrintf(PETSC_COMM_WORLD,"\niters: %d\nerror: %.10e", iters, error);
+    PetscPrintf(PETSC_COMM_WORLD,"\nsetup: %lf\nsolve: %lf\ntotla: %lf", tm_setup, tm_solve, tm_setup+tm_solve);
 
     VecDestroy(&x);
     VecDestroy(&f);
