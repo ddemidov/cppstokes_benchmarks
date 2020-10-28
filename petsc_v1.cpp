@@ -60,7 +60,6 @@ int main(int argc, char *argv[]) {
     PetscTime(&toc);
     double tm_solve = toc - tic;
 
-    KSPConvergedReasonView(solver, PETSC_VIEWER_STDOUT_WORLD);
     KSPGetIterationNumber(solver,&iters);
     KSPGetResidualNorm(solver,&error);
     PetscPrintf(PETSC_COMM_WORLD,"\niters: %d\nerror: %.10e", iters, error);
