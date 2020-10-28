@@ -13,6 +13,7 @@ if (WIN32)
     set(Boost_USE_STATIC_LIBS ON)
 endif ()
 find_package(Boost REQUIRED COMPONENTS program_options)
+cmake_policy(SET CMP0004 OLD)
 
 # --- METIS ----------------------------------------------------------------
 find_package(Metis)
@@ -59,8 +60,6 @@ find_package(MPI)
 add_library(mpi_target INTERFACE)
 target_compile_options(mpi_target INTERFACE ${MPI_CXX_COMPILE_FLAGS})
 target_include_directories(mpi_target INTERFACE ${MPI_CXX_INCLUDE_PATH})
-string(STRIP "${MPI_CXX_LINK_FLAGS}" MPI_CXX_LINK_FLAGS)
-string(STRIP "${MPI_CXX_LIBRARIES}" MPI_CXX_LIBRARIES)
 target_link_libraries(mpi_target INTERFACE "${MPI_CXX_LINK_FLAGS} ${MPI_CXX_LIBRARIES}")
 
 # --- PETSC ----------------------------------------------------------------
