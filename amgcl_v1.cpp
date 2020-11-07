@@ -36,6 +36,8 @@ void solve(const Matrix &K, const std::vector<double> &rhs)
     prm.solver.s = 5;
     prm.solver.maxiter=2000;
     prm.solver.tol = 1e-12;
+    prm.solver.replacement = true;
+    prm.solver.smoothing = true;
 
     Solver solve(K, prm);
     prof.toc("setup");

@@ -161,6 +161,8 @@ int main(int argc, char *argv[]) {
     prm.put("solver.s", 5);
     prm.put("solver.maxiter", 1000);
     prm.put("solver.tol", 1e-12);
+    prm.put("solver.replacement", true);
+    prm.put("solver.smoothing", true);
     prm.put("precond.pmask_size", amgcl::backend::rows(A));
     prm.put("precond.pmask_pattern", ">" + std::to_string(vm["udofs"].as<int>()));
     prm.put("precond.simplec_dia", false);
