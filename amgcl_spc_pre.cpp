@@ -12,7 +12,7 @@
 #include <amgcl/make_block_solver.hpp>
 #include <amgcl/make_solver.hpp>
 #include <amgcl/amg.hpp>
-#include <amgcl/solver/bicgstabl.hpp>
+#include <amgcl/solver/idrs.hpp>
 #include <amgcl/solver/preonly.hpp>
 #include <amgcl/coarsening/aggregation.hpp>
 #include <amgcl/relaxation/ilut.hpp>
@@ -78,7 +78,7 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
                 amgcl::solver::preonly<PBackend>
                 >
             >,
-        amgcl::solver::bicgstabl<SBackend>
+        amgcl::solver::idrs<SBackend>
         > solve(K, prm);
     prof.toc("setup");
 
@@ -98,6 +98,12 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
 
     std::cout << "Iterations: " << iters << std::endl
               << "Error:      " << error << std::endl;
+
+    amgcl::backend::numa_vector<double> r(n);
+    amgcl::backend::residual(f, K, x, r);
+    std::cout << "True error: " <<
+        sqrt(amgcl::backend::inner_product(r,r)) /
+        sqrt(amgcl::backend::inner_product(f,f)) << std::endl;
 }
 
 //---------------------------------------------------------------------------
@@ -152,13 +158,12 @@ int main(int argc, char *argv[]) {
 
     auto A = std::tie(rows, ptr, col, val);
 
-    prm.put("solver.L", 5);
+    prm.put("solver.s", 5);
     prm.put("solver.maxiter", 1000);
     prm.put("solver.tol", 1e-12);
     prm.put("precond.pmask_size", amgcl::backend::rows(A));
     prm.put("precond.pmask_pattern", ">" + std::to_string(vm["udofs"].as<int>()));
     prm.put("precond.simplec_dia", false);
-
 
     solve_schur(A, rhs, prm, vm["quiet"].as<bool>());
 

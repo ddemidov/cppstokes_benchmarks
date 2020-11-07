@@ -98,6 +98,12 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
 
     std::cout << "Iterations: " << iters << std::endl
               << "Error:      " << error << std::endl;
+
+    amgcl::backend::numa_vector<double> r(n);
+    amgcl::backend::residual(f, K, x, r);
+    std::cout << "True error: " <<
+        sqrt(amgcl::backend::inner_product(r,r)) /
+        sqrt(amgcl::backend::inner_product(f,f)) << std::endl;
 }
 
 //---------------------------------------------------------------------------
@@ -158,7 +164,7 @@ int main(int argc, char *argv[]) {
     prm.put("precond.pmask_pattern", ">" + std::to_string(vm["udofs"].as<int>()));
     prm.put("precond.usolver.solver.maxiter", 2);
     prm.put("precond.usolver.solver.tol", 1e-1);
-    prm.put("precond.psolver.solver.maxiter", 8);
+    prm.put("precond.psolver.solver.maxiter", 16);
     prm.put("precond.psolver.solver.tol", 1e-1);
 
 

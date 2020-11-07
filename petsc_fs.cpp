@@ -76,6 +76,20 @@ int main(int argc, char *argv[]) {
     PetscPrintf(PETSC_COMM_WORLD,"\niters: %d\nerror: %.10e", iters, error);
     PetscPrintf(PETSC_COMM_WORLD,"\nsetup: %lf\nsolve: %lf\ntotal: %lf\n", tm_setup, tm_solve, tm_setup+tm_solve);
 
+    Vec r;
+    PetscInt n;
+    VecCreate(PETSC_COMM_WORLD, &r);
+    VecSetFromOptions(r);
+    VecGetLocalSize(x, &n);
+    VecSetSizes(r, n, PETSC_DECIDE);
+    VecAssemblyBegin(r);
+    VecAssemblyEnd(r);
+    MatResidual(A, f, x, r);
+    PetscReal fnorm, rnorm;
+    VecNorm(r, NORM_2, &rnorm);
+    VecNorm(f, NORM_2, &fnorm);
+    PetscPrintf(PETSC_COMM_WORLD, "Real error: %le\n", rnorm / fnorm);
+
     VecDestroy(&x);
     VecDestroy(&f);
     MatDestroy(&A);

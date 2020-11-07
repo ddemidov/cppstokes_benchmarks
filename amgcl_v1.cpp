@@ -6,7 +6,7 @@
 #include <amgcl/backend/builtin.hpp>
 #include <amgcl/adapter/crs_tuple.hpp>
 #include <amgcl/make_solver.hpp>
-#include <amgcl/solver/bicgstabl.hpp>
+#include <amgcl/solver/idrs.hpp>
 #include <amgcl/relaxation/as_preconditioner.hpp>
 #include <amgcl/relaxation/iluk.hpp>
 
@@ -29,11 +29,11 @@ void solve(const Matrix &K, const std::vector<double> &rhs)
     typedef amgcl::make_solver<
         amgcl::relaxation::as_preconditioner<
             Backend, amgcl::relaxation::iluk>,
-        amgcl::solver::bicgstabl<Backend>
+        amgcl::solver::idrs<Backend>
         > Solver;
 
     Solver::params prm;
-    prm.solver.L = 5;
+    prm.solver.s = 5;
     prm.solver.maxiter=2000;
     prm.solver.tol = 1e-12;
 
@@ -56,6 +56,12 @@ void solve(const Matrix &K, const std::vector<double> &rhs)
 
     std::cout << "Iterations: " << iters << std::endl
               << "Error:      " << error << std::endl;
+
+    amgcl::backend::numa_vector<double> r(n);
+    amgcl::backend::residual(f, K, x, r);
+    std::cout << "True error: " <<
+        sqrt(amgcl::backend::inner_product(r,r)) /
+        sqrt(amgcl::backend::inner_product(f,f)) << std::endl;
 }
 
 //---------------------------------------------------------------------------
