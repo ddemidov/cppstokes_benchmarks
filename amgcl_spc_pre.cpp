@@ -66,6 +66,8 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
     typedef amgcl::backend::builtin<prec_scalar> PBackend;
     typedef amgcl::backend::builtin<double> SBackend;
 
+    amgcl::backend::crs<double> A(K);
+
     prof.tic("setup");
     amgcl::make_solver<
         amgcl::preconditioner::schur_pressure_correction<
@@ -79,7 +81,7 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
                 >
             >,
         amgcl::solver::idrs<SBackend>
-        > solve(K, prm);
+        > solve(A, prm);
     prof.toc("setup");
 
     if (!quiet) std::cout << solve << std::endl;
@@ -93,7 +95,7 @@ void solve_schur(const Matrix &K, const std::vector<double> &rhs, boost::propert
     double error;
 
     prof.tic("solve");
-    std::tie(iters, error) = solve(K, f, x);
+    std::tie(iters, error) = solve(A, f, x);
     prof.toc("solve");
 
     std::cout << "Iterations: " << iters << std::endl
