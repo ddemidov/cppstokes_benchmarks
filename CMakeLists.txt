@@ -28,18 +28,6 @@ target_link_libraries(bin2mm amgcl::amgcl Boost::program_options)
 add_executable(partition partition.cpp)
 target_link_libraries(partition amgcl::amgcl Boost::program_options Metis::metis)
 
-add_executable(amgcl_spc amgcl_spc.cpp)
-target_link_libraries(amgcl_spc amgcl::amgcl Boost::program_options)
-target_compile_definitions(amgcl_spc PRIVATE PRECOND_SCALAR=double)
-
-add_executable(amgcl_spc_block amgcl_spc.cpp)
-target_link_libraries(amgcl_spc_block amgcl::amgcl Boost::program_options)
-target_compile_definitions(amgcl_spc_block PRIVATE PRECOND_SCALAR=double BLOCK_U)
-
-add_executable(amgcl_spc_block_mixed amgcl_spc.cpp)
-target_link_libraries(amgcl_spc_block_mixed amgcl::amgcl Boost::program_options)
-target_compile_definitions(amgcl_spc_block_mixed PRIVATE PRECOND_SCALAR=float BLOCK_U)
-
 add_executable(amgcl_spc_pre amgcl_spc_pre.cpp)
 target_link_libraries(amgcl_spc_pre amgcl::amgcl Boost::program_options)
 target_compile_definitions(amgcl_spc_pre PRIVATE PRECOND_SCALAR=double)
@@ -51,18 +39,6 @@ target_compile_definitions(amgcl_spc_pre_block PRIVATE PRECOND_SCALAR=double BLO
 add_executable(amgcl_spc_pre_block_mixed amgcl_spc_pre.cpp)
 target_link_libraries(amgcl_spc_pre_block_mixed amgcl::amgcl Boost::program_options)
 target_compile_definitions(amgcl_spc_pre_block_mixed PRIVATE PRECOND_SCALAR=float BLOCK_U)
-
-add_executable(amgcl_spc_ucube amgcl_spc_ucube.cpp)
-target_link_libraries(amgcl_spc_ucube amgcl::amgcl Boost::program_options)
-target_compile_definitions(amgcl_spc_ucube PRIVATE PRECOND_SCALAR=double)
-
-add_executable(amgcl_spc_ucube_block amgcl_spc_ucube.cpp)
-target_link_libraries(amgcl_spc_ucube_block amgcl::amgcl Boost::program_options)
-target_compile_definitions(amgcl_spc_ucube_block PRIVATE PRECOND_SCALAR=double BLOCK_U)
-
-add_executable(amgcl_spc_ucube_block_mixed amgcl_spc_ucube.cpp)
-target_link_libraries(amgcl_spc_ucube_block_mixed amgcl::amgcl Boost::program_options)
-target_compile_definitions(amgcl_spc_ucube_block_mixed PRIVATE PRECOND_SCALAR=float BLOCK_U)
 
 add_executable(amgcl_v1 amgcl_v1.cpp)
 target_link_libraries(amgcl_v1 amgcl::amgcl Boost::program_options)
