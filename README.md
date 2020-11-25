@@ -22,6 +22,23 @@ In order to run the PETSc benchmarks, the systems need to be partitioned. This
 can be done with the provided `partition.cpp`. The following example partitions
 the matrix for 4 MPI processes:
 
+Build example
+```sh
+export PETSC_DIR=/home/petsc-3.10.0/petsc-lib
+export PETSC_ARCH=""
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/petsc-3.10.0/petsc-lib
+
+cmake .. \
+      -DCMAKE_CXX_COMPILER=icpc \
+      -DCMAKE_CXX_FLAGS="-std=c++11" \
+      -DCMAKE_C_COMPILER=icc \
+      -DCMAKE_C_FLAGS="-std=gnu11" \
+      -DMETIS_LIBRARY="/home/petsc-3.10.0/petsc-lib/lib/libmetis.so" \
+      -DPARMETIS_LIBRARY="/home/petsc-3.10.0/petsc-lib/lib/libparmetis.so" \
+      -DPETSC_LIBRARY="/home/petsc-3.10.0/petsc-lib/lib/libpetsc.so" \
+      -DMetis_INCLUDE_DIRS="/home/petsc-3.10.0/petsc-lib/include"
+```
+
 ```sh
 ./partition -B -i A.bin -n 4 -o part4.bin
 ```
