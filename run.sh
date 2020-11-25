@@ -16,7 +16,7 @@ for p in $( ./problems.py ); do
     partition -B -i ${A} -o part.bin -n ${np}
     echo
     echo --- PETSC ---
-    OMP_NUM_THREADS=1 mpirun -np ${np} petsc_fs -A ${A} -f ${b}-u $( cat ${u} ) -p part.bin 
+    OMP_NUM_THREADS=1 mpirun -np ${np} petsc_fs -A ${A} -f ${b}-u $( cat ${u} ) -p part.bin  -ksp_monitor -memory_view
     echo
     echo --- AMGCL ---
     OMP_NUM_THREADS=${np} OMP_PLACES=cores amgcl_spc_block_mixed -A ${A} -f ${b} -u $( cat ${u} )
