@@ -35,23 +35,29 @@ cmake .. \
       -DMetis_INCLUDE_DIRS="/home/petsc-3.10.0/petsc-lib/include"
 ```
 
+Download dataset
+```sh
+dset="https://zenodo.org/record/4134357/files"
+wget ${dset}/spack_1_A.bin ${dset}/spack_1_b.bin ${dset}/spack_1_u.txt
+```
+
 In order to run the PETSc benchmarks, the systems need to be partitioned. This
 can be done with the provided `partition.cpp`. The following example partitions
 the matrix for 4 MPI processes:
 
 ```sh
-./partition -B -i A.bin -n 4 -o part4.bin
+./partition -B -i spack_1_A.bin -n 4 -o part4.bin
 ```
 
 An example of running a PETSc benchmark:
 ```sh
 export OMP_NUM_THREADS=1
-mpirun -np 4 ./petsc_v1 -A A.bin -f b.bin -p part4.bin
-mpirun -np 4 ./petsc_fs -A A.bin -f b.bin -p part4.bin -u $(cat u.txt)
+mpirun -np 4 ./petsc_v1 -A spack_1_A.bin -f spack_1_b.bin -p part4.bin -ksp_monitor -memory_view
+mpirun -np 4 ./petsc_fs -A spack_1_A.bin -f spack_1_b.bin -p part4.bin -u $(cat spack_1_u.txt) -ksp_monitor -memory_view
 ```
 
 An example of running an AMGCL benchmark:
 ```sh
-./amgcl_v1 -A A.bin -f b.bin
-./amgcl_spc_block_mixed -A A.bin -f b.bin -u $(cat u.txt)
+./amgcl_v1 -A spack_1_A.bin -f b.bin
+./amgcl_spc_block_mixed -A spack_1_A.bin -f spack_1_b.bin -u $(cat spack_1_u.txt)
 ```
