@@ -18,10 +18,6 @@ Each problem contains the system matrix (`A.bin`), the RHS vector (`b.bin`),
 and the text file containing the number of DOFs corresponding to the velocity
 field (`u.txt`) for 6 to 7 different problem sizes.
 
-In order to run the PETSc benchmarks, the systems need to be partitioned. This
-can be done with the provided `partition.cpp`. The following example partitions
-the matrix for 4 MPI processes:
-
 Build example
 ```sh
 export PETSC_DIR=/home/petsc-3.10.0/petsc-lib
@@ -38,6 +34,10 @@ cmake .. \
       -DPETSC_LIBRARY="/home/petsc-3.10.0/petsc-lib/lib/libpetsc.so" \
       -DMetis_INCLUDE_DIRS="/home/petsc-3.10.0/petsc-lib/include"
 ```
+
+In order to run the PETSc benchmarks, the systems need to be partitioned. This
+can be done with the provided `partition.cpp`. The following example partitions
+the matrix for 4 MPI processes:
 
 ```sh
 ./partition -B -i A.bin -n 4 -o part4.bin
