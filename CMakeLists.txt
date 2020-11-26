@@ -63,3 +63,29 @@ target_link_libraries(petsc_fs petsc_target mpi_target)
 add_executable(petsc_v1 petsc_v1.cpp petsc_read.cpp)
 target_include_directories(petsc_v1 PRIVATE ${AMGCL_INCLUDE_DIRS})
 target_link_libraries(petsc_v1 petsc_target mpi_target)
+
+# --- Pardiso --------------------------------------------------------------
+find_package(OpenMP)
+find_path(EIGEN_INCLUDE Eigen/SparseCore PATH_SUFFIXES eigen3)
+if (EIGEN_INCLUDE)
+
+    find_path(MKL_INCLUDE mkl_pardiso.h PATHS $ENV{MKL_ROOT} /opt/intel/mkl PATH_SUFFIXES include)
+    find_library(MKL_CORE NAMES mkl_core PATHS $ENV{MKL_ROOT} /opt/intel/mkl PATH_SUFFIXES lib/intel64)
+    find_library(MKL_INTEL_LP64 NAMES mkl_intel_lp64 PATHS $ENV{MKL_ROOT} /opt/intel/mkl PATH_SUFFIXES lib/intel64)
+    find_library(MKL_GNU_THREAD NAMES mkl_gnu_thread PATHS $ENV{MKL_ROOT} /opt/intel/mkl PATH_SUFFIXES lib/intel64)
+    message(STATUS "MKL: ${MKL_CORE} ${MKL_INTEL_LP64}")
+
+    if (MKL_INCLUDE)
+        add_executable(pardiso pardiso.cpp)
+        target_include_directories(pardiso PRIVATE ${EIGEN_INCLUDE} ${MKL_INCLUDE})
+        target_compile_definitions(pardiso PRIVATE EIGEN_USE_MKL_ALL)
+        target_compile_options(pardiso PRIVATE )
+        target_link_libraries(pardiso
+            OpenMP::OpenMP_CXX
+            Boost::program_options
+            ${MKL_INTEL_LP64}
+            ${MKL_GNU_THREAD}
+            ${MKL_CORE}
+            )
+    endif()
+endif()
